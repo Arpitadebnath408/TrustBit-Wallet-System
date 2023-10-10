@@ -1,0 +1,571 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TrustBit Wallet</title>
+    <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}"/>
+    <link rel="stylesheet" href="{% static 'css/components.css' %}">
+    <link rel="stylesheet" href="{% static 'css/icons.css' %}">
+    <link rel="stylesheet" href="{% static 'css/responsee.css' %}">
+    <link rel="stylesheet" href="{% static 'owl-carousel/owl.carousel.css' %}">
+    <link rel="stylesheet" href="{% static 'owl-carousel/owl.theme.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <!-- CUSTOM STYLE -->
+    <link rel="stylesheet" href="{% static 'css/template-style.css' %}">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,700,800&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <script type="text/javascript" src="{% static 'js/jquery-1.8.3.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery-ui.min.js' %}"></script>    
+    <script type="text/javascript" src="{% static 'js/validation.js' %}"></script> 
+  </head>  
+  
+  <body class="size-1140">
+  	<!-- PREMIUM FEATURES BUTTON -->
+  	<a target="_blank" class="hide-s" href="../template/prospera-premium-responsive-business-template/" style="position:fixed;top:120px;right:-14px;z-index:10;"></a>
+    <!-- HEADER -->
+    <header role="banner">    
+      <!-- Top Navigation -->
+      <nav class="background-white background-primary-hightlight">
+        <div class="line">
+          <div class="s-12 l-2">
+            <a href="{% url 'index' %}" class="logo"><img src="{% static 'img/logo.png' %}" alt=""></a>
+          </div>
+          <div class="top-nav s-12 l-10">
+            <p class="nav-text"></p>
+            <ul class="right chevron">
+              <li><a href="{% url 'index' %}">Home</a></li>
+              <li><a href="{% url 'about' %}">About</a></li>
+              {% if user.is_authenticated %}
+              <li><a href="#">Send Bitcoin</a></li>
+              <li><a href="#">Receive Bitcoin</a></li>
+              <li><a href="{% url 'logout' %}">Logout</a></li>
+              {% else %}
+              <li><a href="{% url 'register' %}">Register</a></li>
+              <li><a href="{% url 'login' %}">Login</a></li>
+              {% endif %}
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+    
+    <!-- MAIN -->
+    <main role="main">
+      <!-- Main Carousel -->
+      {% if user.is_authenticated %}
+        <div class="line" style="margin-top: 20px;">
+          <h2 class="text-thin headline text-center">Your Bitcoin Address:</h2>
+          <h3 align="center">
+            <b>{{ user_info.address }}</b>
+          </h3>
+        </div>
+        <div class="line">
+          <h2 class="text-thin headline text-center">Your Balance (USD):</h2>
+          <h3 align="center">
+            {{ user_wallet_details.balance_usd }} USD
+          </h3>
+        </div>
+        <div align="center" style="margin-bottom: 20px;">
+          <style>
+                .button {
+                  border-radius: 25px;
+                  background-color: #4CAF50; /* Green */
+                  border: none;
+                  color: white;
+                  padding: 16px 32px;
+                  text-align: center;
+                  text-decoration: none;
+                  display: inline-block;
+                  font-size: 16px;
+                  margin: 4px 2px;
+                  transition-duration: 0.4s;
+                  cursor: pointer;
+                }
+                
+                .button1 {
+                  border-radius: 25px;
+                  background-color: #FF8C00; 
+                  color: black; 
+                  border: 2px solid #FF8C00;
+                }
+                
+                .button1:hover {
+                  background-color: white;
+                  color: #FF8C00;
+                }
+          </style>
+          <a href="#"><button class="button button1" onclick="sendFunction()">Send Btcoin</button></a>
+          <a href="#"><button class="button button1" onclick="receiveFunction()">Receive Btcoin</button></a>
+        </div>
+
+      <div align="center" id="sendbitcoin">
+        <!--<h1><b>Send Bitcoin</b></h1><br>-->
+        <h1>This Feature is Coming Soon</h1>
+        <p style="max-width: 400px; min-width: 100px;">
+          <b>
+           For now, you can have access to your funds by exporting it into another wallet provider that has the 
+           functionality to send bitcoin .To do that, Click the button below to get your private key, so that you 
+           can export it to another wallet provider
+           </b>
+        </p>
+        <button onclick="getpk()" class="btn" style="border-radius: 20px;">
+          Get Private Key
+        </button><br>
+        <div id="pk" >
+          <h3><b>Your Private Key Is:</b></h3>
+          <b>{{ user_info.private_key }}</b>
+        </div>
+        
+      </div>
+
+      <div align="center" id="receivebitcoin">
+        <h1>Copy Your Address Below To Receive Bitcoin</h1>
+
+        <style>
+          .tooltip {
+            position: relative;
+            display: inline-block;
+          }
+          
+          .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 300px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 150%;
+            left: 50%;
+            margin-left: -75px;
+            opacity: 0;
+            transition: opacity 0.3s;
+          }
+          
+          .tooltip .tooltiptext::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #555 transparent transparent transparent;
+          }
+          
+          .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+          }
+          </style>
+          
+          
+          
+          <input type="text" size="50" style="border-radius: 20px;" value="{{ user_info.address }}" id="myInput" readonly>
+          
+          <div class="tooltip">
+          <button onclick="myFunction()" onmouseout="outFunc()" style="border-radius: 20px;">
+            <span class="tooltiptext" id="myTooltip">Copy to clipboard</span>
+            Copy Address
+          </button>
+
+          
+          </div><br><br>
+
+          <h2>Or Scan Your QR Code Below</h2>
+          
+          <div>
+            <img align="center" src="https://bitref.com/qrcode.php?data={{ user_info.address }}">
+          </div>
+          
+          <script>
+          function myFunction() {
+            var copyText = document.getElementById("myInput");
+            copyText.select();
+            copyText.setSelectionRange(0, 99999);
+            document.execCommand("copy");
+            
+            var tooltip = document.getElementById("myTooltip");
+            tooltip.innerHTML = "Copied: " + copyText.value;
+          }
+          
+          function outFunc() {
+            var tooltip = document.getElementById("myTooltip");
+            tooltip.innerHTML = "Copy to clipboard";
+          }
+          </script>
+      </div>
+
+      <script>
+        document.getElementById("receivebitcoin").style.display = "none";
+        document.getElementById("sendbitcoin").style.display = "none";
+        document.getElementById("pk").style.display = "none";
+        function receiveFunction() {
+          var x = document.getElementById("receivebitcoin");
+          var y = document.getElementById("details");
+          var z = document.getElementById("sendbitcoin")
+          var pk = document.getElementById("pk")
+          if (x.style.display === "none") {
+            z.style.display = "none";
+            y.style.display = "none";
+            x.style.display = "block";
+          } else {
+            z.style.display = "none";
+            x.style.display = "none";
+            y.style.display = "block";
+          }
+        }
+        function sendFunction() {
+          var x = document.getElementById("receivebitcoin");
+          var y = document.getElementById("details");
+          var z = document.getElementById("sendbitcoin")
+          if (z.style.display === "none") {
+            z.style.display = "block";
+            y.style.display = "none";
+            x.style.display = "none";
+          } else {
+            z.style.display = "none";
+            x.style.display = "none";
+            y.style.display = "block";
+          }
+        }
+        function getpk(){
+          pk.style.display = "block";
+        }
+      </script>
+
+      <section id="details">
+      <style>
+          table {
+              width:100%;
+            }
+            table, th, td {
+              border: 1px solid rgb(90, 86, 86);
+              border-collapse: collapse;
+            }
+            th, td {
+              padding: 15px;
+              text-align: left;
+            }
+            table#t01 tr:nth-child(even) {
+              background-color: #eee;
+            }
+            table#t01 tr:nth-child(odd) {
+             background-color: #fff;
+            }
+            table#t01 th {
+              background-color: #FF8C00;
+              color: white;
+            }
+      </style>
+      <br>
+      <h3 align="center"> Click Submit Below To See Details of <b>{{ user_info.address }}</b></h3>
+      <h3 align="center">Final Balance:  {{ user_wallet_details.balance }}</h3>
+      
+      <form action="/" method="POST">
+        {% csrf_token %}
+        <style>
+            .button {
+              border-radius: 25px;
+              background-color: #4CAF50; /* Green */
+              border: none;
+              color: white;
+              padding: 16px 32px;
+              text-align: center;
+              text-decoration: none;
+              display: inline-block;
+              font-size: 16px;
+              margin: 4px 2px;
+              transition-duration: 0.4s;
+              cursor: pointer;
+            }
+            
+            .button1 {
+              border-radius: 25px;
+              background-color: #FF8C00; 
+              color: black; 
+              border: 2px solid #FF8C00;
+            }
+            
+            .button1:hover {
+              background-color: white;
+              color: #FF8C00;
+            }
+        </style>
+
+        <input type="hidden" name="addr" value="{{ user_info.address }}"><br>
+        <h6 align="center"><input type="submit" value="Submit" class="button button1"></h6>
+      </form>
+
+        <table id="t01">
+          <tr>
+            <th> </th>
+            <th>BTC</th> 
+            <th>USD</th>
+          </tr>
+          <tr>
+            <td>Transactions</td>
+            <td><b>{{user_wallet_details.transactions}}</b></td>
+            <td><b>   </b></td>
+          </tr>
+          <tr>
+            <td>Total Received</td>
+            <td><b>{{user_wallet_details.total_received}}</b></td>
+            <td><b>{{user_wallet_details.total_received_usd}} USD</b></td>
+          </tr>
+          <tr>
+            <td>Total Sent</td>
+            <td><b>{{user_wallet_details.total_sent}}</b></td>
+            <td><b>{{user_wallet_details.total_sent_usd}} USD</b></td>
+          </tr>
+          <tr>
+            <td>Final Balance</td>
+            <td><b>{{user_wallet_details.balance}}</b></td>
+            <td><b>{{user_wallet_details.balance_usd}} USD</b></td>
+          </tr>
+        </table>
+      </section>
+
+      {% else %}
+      
+      <section class="section background-dark">
+        <div class="line">
+          <div class="carousel-fade-transition owl-carousel carousel-main carousel-nav-white carousel-wide-arrows">
+            <div class="item">
+              <div class="s-12 center">
+                <img src="{% static 'img/01-boxed.jpg' %}" alt="">
+                <div class="carousel-content">
+                  <div class="padding-2x">
+                    <div class="s-12 m-12">
+                      <p class="text-white text-s-size-20 text-m-size-40 text-l-size-60 margin-bottom-40 text-thin text-line-height-1"><b>Get Your Bitcoin Wallet In Seconds</b></p>
+                      <p class="text-white text-size-16 margin-bottom-40"></p>  
+                    </div>                  
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="item">
+              <div class="s-12 center">
+                <img src="{% static 'img/02-boxed.jpg' %}" alt="">
+                <div class="carousel-content">
+                  <div class="padding-2x">
+                    <div class="s-12 m-12">
+                      <p class="text-white text-s-size-20 text-m-size-40 text-l-size-60 margin-bottom-40 text-thin text-line-height-1"><b>Control Your Funds At Your Finger Tips</b></p>
+                      <p class="text-white text-size-16 margin-bottom-30"></p>    
+                    </div>                  
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>  
+        </div>
+      </section>
+
+      <!-- Section 2 -->
+      <section class="section background-primary text-center">
+        <div class="line">
+            <div class="s-12 m-10 l-8 center">
+                <h2 class="headline text-s-size-30">Welcome to TrustBit Wallet</h2>
+                <p class="text-size-20">Experience the future of secure cryptocurrency management. TrustBit Wallet is your gateway to seamless transactions, robust security, and financial empowerment in the world of cryptocurrencies. We're here to redefine how you manage and protect your digital assets.</p>
+            </div>
+        </div>
+      </section>
+      
+      <!-- Section 4 --> 
+      <section class="section background-white">
+        <div class="line">
+            <h2 class="text-thin headline text-center text-s-size-30 margin-bottom-50">Join TrustBit Wallet <span style="color: #FF8C00">Today</span></h2>
+            <p class="text-center text-size-20 margin-bottom-30">Experience the world of cryptocurrencies with a complimentary Bitcoin wallet.</p>
+            <div class="text-center">
+                <a href="/register" class="button background-primary text-size-20 text-white-hover">Create Your Free Wallet</a>
+            </div>
+        </div>    
+      </section>
+      
+      <section class="section background-dark text-center">
+        <div class="line">
+            <div class="margin-bottom-50 text-center">
+                <h2 class="text-thin headline text-s-size-30">Why Choose TrustBit Wallet?</h2>
+                <p class="text-size-20 margin-bottom-30">Discover the advantages of using TrustBit Wallet for your cryptocurrency needs.</p>
+            </div>
+            <div class="s-12 m-6 l-4 margin-m-bottom">
+                <div class="padding-2x">
+                    <div class="icon-circle background-primary text-center">
+                        <i class="fas fa-shield-alt fa-2x text-white" style="padding: 10px 0;"></i>
+                    </div>
+                    <h3 class="margin-top-20">Security First</h3>
+                    <p class="text-size-16">Your assets are protected by state-of-the-art security measures, ensuring your peace of mind.</p>
+                </div>
+            </div>
+            <div class="s-12 m-6 l-4 margin-m-bottom">
+                <div class="padding-2x">
+                    <div class="icon-circle background-primary text-center">
+                        <i class="fas fa-bolt fa-2x text-white" style="padding: 10px 0;"></i>
+                    </div>
+                    <h3 class="margin-top-20">Fast Transactions</h3>
+                    <p class="text-size-16">Enjoy lightning-fast transactions, so you can send and receive Bitcoin with ease.</p>
+                </div>
+            </div>
+            <div class="s-12 m-6 l-4 margin-m-bottom">
+                <div class="padding-2x">
+                    <div class="icon-circle background-primary text-center">
+                        <i class="fas fa-user fa-2x text-white" style="padding: 10px 0;"></i>
+                    </div>
+                    <h3 class="margin-top-20">User-Centric Design</h3>
+                    <p class="text-size-16">Our intuitive interface makes cryptocurrency management accessible to everyone.</p>
+                </div>
+            </div>
+            <div class="s-12 m-6 l-4 margin-m-bottom">
+              <div class="padding-2x">
+                  <div class="icon-circle background-primary text-center">
+                      <i class="fas fa-lock fa-2x text-white" style="padding: 10px 0;"></i>
+                  </div>
+                  <h3 class="margin-top-20">Robust Security</h3>
+                  <p class="text-size-16">We employ the latest security protocols to keep your assets safe from threats.</p>
+              </div>
+          </div>
+          <div class="s-12 m-6 l-4 margin-m-bottom">
+              <div class="padding-2x">
+                  <div class="icon-circle background-primary text-center">
+                      <i class="fas fa-globe fa-2x text-white" style="padding: 10px 0;"></i>
+                  </div>
+                  <h3 class="margin-top-20">Global Accessibility</h3>
+                  <p class="text-size-16">Access your Bitcoin wallet from anywhere in the world, 24/7.</p>
+              </div>
+          </div>
+          <div class="s-12 m-6 l-4 margin-m-bottom">
+              <div class="padding-2x">
+                  <div class="icon-circle background-primary text-center">
+                      <i class="fas fa-hand-holding-usd fa-2x text-white" style="padding: 10px 0;"></i>
+                  </div>
+                  <h3 class="margin-top-20">Financial Empowerment</h3>
+                  <p class="text-size-16">TrustBit Wallet helps you take control of your financial future with cryptocurrencies.</p>
+              </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    {% endif %}
+    <!-- Beautiful section to display live Bitcoin price -->
+    <section class="live-price-section">
+      <div class="container">
+          <div class="row">
+              <div class="col-md-12 text-center">
+                  <h2>Live Bitcoin Price</h2>
+                  <p class="bitcoin-price">{{ live_bitcoin_price }} USD</p>
+              </div>
+          </div>
+      </div>
+    </section>
+    <!-- FOOTER -->
+    <footer>
+      <!-- Social -->
+      <div class="background-primary padding text-center">
+        <h1>
+            <b style="font-size: 40px">TrustBit Wallet</b>
+        </h1>
+        <a href="#" style="margin-right: 10px;"><i class="icon-facebook_circle icon2x text-white"></i></a>
+        <a href="#" style="margin-right: 10px;"><i class="icon-twitter_circle icon2x text-white"></i></a>
+        <a href="#" style="margin-right: 10px;"><i class="icon-instagram_circle icon2x text-white"></i></a>
+      </div>
+      
+      <!-- Main Footer -->
+    
+      	<section class="section background-dark">
+        <div class="line">
+          <div class="margin">
+            <div class="s-12 m-12 l-4 margin-m-bottom-2x">
+              <h4 class="text-uppercase text-strong">Our Philosophy</h4>
+              <p class="text-size-20"><em>"At TrustBit Wallet, our philosophy is deeply rooted in empowering individuals to embrace the world of cryptocurrencies with confidence and security."</em><p>
+                            
+              <div class="line">
+                <h4 class="text-uppercase text-strong margin-top-30">About TrustBit Wallet</h4>
+                <p>TrustBit Wallet is a leading cryptocurrency management platform dedicated to ensuring the security and convenience of your digital assets.</p>
+                <a class="text-more-info text-primary-hover" href="/">Read more</a>
+              </div>
+            </div>
+            
+            <div class="s-12 m-12 l-4 margin-m-bottom-2x">
+              <h4 class="text-uppercase text-strong">Contact Us</h4>
+              <div class="line">
+                <div class="s-1 m-1 l-1 text-center">
+                  <i class="icon-placepin text-primary text-size-12"></i>
+                </div>
+                <div class="s-11 m-11 l-11 margin-bottom-10">
+                  <p><b>Adress: </b>Green Road, Dhaka, Bangladesh</p>
+                </div>
+              </div>
+              <div class="line">
+                <div class="s-1 m-1 l-1 text-center">
+                  <i class="icon-mail text-primary text-size-12"></i>
+                </div>
+                <div class="s-11 m-11 l-11 margin-bottom-10">
+                  <p><a href="/" class="text-primary-hover"><b>E-mail:</b> debnatharpita225@gmail.com</a></p>
+                </div>
+              </div>
+              <div class="line">
+                <div class="s-1 m-1 l-1 text-center">
+                  <i class="icon-smartphone text-primary text-size-12"></i>
+                </div>
+                <div class="s-11 m-11 l-11 margin-bottom-10">
+                  <p><b>Phone:</b> +8801876******</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="s-12 m-12 l-4">
+              <h4 class="text-uppercase text-strong">Leave a Message</h4>
+              <form class="customform text-white" method="post" action="{% url 'submit_form' %}">
+                {% csrf_token %}
+                <div class="line">
+                  <div class="margin">
+                    <div class="s-12 m-12 l-6">
+                      <input name="email" class="required email border-radius" placeholder="Your e-mail" title="Your e-mail" type="text" />
+                    </div>
+                    <div class="s-12 m-12 l-6">
+                      <input name="name" class="name border-radius" placeholder="Your name" title="Your name" type="text" />
+                    </div>
+                  </div>
+                </div>
+                <div class="s-12">
+                  <textarea name="message" class="required message border-radius" placeholder="Your message" rows="3"></textarea>
+                </div>
+                <div class="s-12"><button class="submit-form button background-primary border-radius text-white" type="submit">Submit Button</button></div> 
+              </form>
+              <!-- Display success message if it exists -->
+            <div id="success-message">
+              {% if messages %}
+                  {% for message in messages %}
+                      {% if message.tags == 'success' %}
+                          {{ message }}
+                      {% endif %}
+                  {% endfor %}
+              {% endif %}
+            </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <hr class="break margin-top-bottom-0" style="border-color: rgba(0, 38, 51, 0.80);">
+      
+      <!-- Bottom Footer -->
+      <section class="padding background-dark">
+        <div class="line">
+          <div class="s-12 l-6">
+            <p class="">Copyright @2023, TrustBit Wallet</p>
+          </div>
+          <div class="s-12 l-6">
+            <p class="right" href="#">Designed and Coded by <a href="#" style="color: #a0a0a0;">Arpita Debnath</a></p>
+          </div>
+        </div>
+      </section>
+    </footer> 
+    <script type="text/javascript" src="{% static 'js/responsee.js' %}"></script>
+    <script type="text/javascript" src="{% static 'owl-carousel/owl.carousel.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/template-scripts.js' %}"></script>   
+   </body>
+</html>
