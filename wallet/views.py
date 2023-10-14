@@ -142,3 +142,13 @@ def submit_form(request):
         return redirect('index')
 
     return render(request, 'index.html')
+
+def send_bitcoin(request):
+    user = request.user
+    user_info = UserInfo.objects.get(user=user)
+    return render(request, "send_bitcoin.html", {"user_info": user_info})
+
+def receive_bitcoin(request):
+    user = request.user
+    user_info = UserInfo.objects.get(user=user)
+    return render(request, "receive_bitcoin.html", {"user_info": user_info})

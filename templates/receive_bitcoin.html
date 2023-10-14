@@ -5,7 +5,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>About - TrustBit Wallet</title>
+    <title>Receive Bitcoin - TrustBit Wallet</title>
     <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}"/>
     <link rel="stylesheet" href="{% static 'css/components.css' %}">
     <link rel="stylesheet" href="{% static 'css/icons.css' %}">
@@ -20,65 +20,68 @@
     <script type="text/javascript" src="{% static 'js/jquery-ui.min.js' %}"></script>    
     <script type="text/javascript" src="{% static 'js/validation.js' %}"></script> 
     <style>
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 20px;
+        .tooltip {
+            position: relative;
+            display: inline-block;
         }
-
-        /* About section */
-        .about-section {
-            background-color: #002633;
-            padding: 50px 0px;
-        }
-
-        .about-section h1 {
-            font-size: 40px;
-            margin-bottom: 40px;
-            font-weight: bolder;
-            text-align: center;
+        
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 300px;
+            background-color: #555;
             color: #fff;
-        }
-
-        .about-section p {
-            font-size: 18px;
-            line-height: 1.5;
-            margin-bottom: 15px;
-            text-align: justify;
-            color: #fff;
-        }
-        
-        /* Team section */
-        .team-section {
-            background-color: #fff;
-            padding: 50px;
             text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 150%;
+            left: 50%;
+            margin-left: -75px;
+            opacity: 0;
+            transition: opacity 0.3s;
         }
         
-        .team-section h2 {
-            font-size: 40px;
-            margin-bottom: 40px;
-            font-weight: bolder;
+        .tooltip .tooltiptext::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #555 transparent transparent transparent;
         }
-
-        .team-member {
+        
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+        .button {
+            border-radius: 25px;
+            background-color: #4CAF50; /* Green */
+            border: none;
+            color: white;
+            padding: 16px 32px;
             text-align: center;
-            margin-bottom: 50px;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            transition-duration: 0.4s;
+            cursor: pointer;
         }
         
-        .team-member img {
-            max-width: 140px;
-            max-height: 140px;
-            border-radius: 50%;
-            margin-bottom: 10px;
-            margin: 0 auto;
-            margin-bottom: 20px;
+        .button1 {
+            border-radius: 25px;
+            background-color: #FF8C00; 
+            color: black; 
+            border: 2px solid #FF8C00;
         }
-
-        .team-member h3{
-            margin-bottom: 0px;
-            font-weight: bolder;
-            font-size: 24px;
+        
+        .button1:hover {
+            background-color: white;
+            color: #FF8C00;
         }
     </style>
   </head>  
@@ -100,8 +103,8 @@
               <li><a href="{% url 'index' %}">Home</a></li>
               <li><a href="{% url 'about' %}">About</a></li>
               {% if user.is_authenticated %}
-              <li><a href="#">Send Bitcoin</a></li>
-              <li><a href="#">Receive Bitcoin</a></li>
+              <li><a href="{% url 'send_bitcoin' %}">Send Bitcoin</a></li>
+              <li><a href="{% url 'receive_bitcoin' %}">Receive Bitcoin</a></li>
               <li><a href="{% url 'logout' %}">Logout</a></li>
               {% else %}
               <li><a href="{% url 'register' %}">Register</a></li>
@@ -112,52 +115,50 @@
         </div>
       </nav>
     </header>
-
-    <section class="about-section">
-        <div class="container">
-            <h1>About TrustBit Wallet</h1>
-            <p>TrustBit Wallet is a secure and user-friendly Bitcoin wallet that allows you to manage your cryptocurrency with ease. Our mission is to provide a seamless and reliable platform for cryptocurrency enthusiasts.</p>
-            <p>With TrustBit Wallet, you can securely store your Bitcoin, make transactions, and stay updated with the latest cryptocurrency prices. We prioritize security, ensuring that your assets are protected at all times.</p>
-            <p>Our team is dedicated to delivering the best possible experience for our users. We believe in the power of blockchain technology and its potential to transform the world of finance.</p>
-        </div>
-    </section>
-
-    <section class="team-section">
-        <div class="container">
-            <h2>Our Team</h2>
-            <div class="team-member">
-                <img src="{% static 'img/arpa.jpg' %}" alt="Team Member 1">
-                <h3>Arpita Debnath</h3>
-                <p>Frontend & Backend Developer</p>
-            </div>
-            <div class="team-member">
-              <img src="{% static 'img/Emran.jpg' %}" alt="Team Member 2">
-              <h3>Emran Ahmed</h3>
-              <p>Backend Developer</p>
-            </div>
-            <div class="team-member">
-                <img src="{% static 'img/tahmid.jpg' %}" alt="Team Member 3">
-                <h3>Tahmid Ahamed</h3>
-                <p>Backend Developer</p>
-            </div>
-            <div class="team-member">
-              <img src="{% static 'img/adity.jpg' %}" alt="Team Member 4">
-              <h3>Adity Ghosh</h3>
-              <p>Backend Developer</p>
-            </div>
-            <div class="team-member">
-              <img src="{% static 'img/anika.jpg' %}" alt="Team Member 5">
-              <h3>Anika Tasnim</h3>
-              <p>Backend Developer</p>
-            </div>
-            <div class="team-member">
-              <img src="{% static 'img/ahnaf.jpg' %}" alt="Team Member 6">
-              <h3>Ahnaf Tahmid</h3>
-              <p>Backend Developer</p>
-            </div>
-        </div>
-    </section>
     
+    <!-- MAIN -->
+    <main role="main" style="margin: 60px 0px;">
+
+        <div align="center">
+            <h1>Copy Your Address Below To Receive Bitcoin</h1>
+            
+            <input type="text" size="50" style="border-radius: 20px; padding: 12px; font-size: 16px" value="{{ user_info.address }}" id="myInput" readonly>
+            
+            <div class="tooltip">
+            <button onclick="myFunction()" onmouseout="outFunc()" class="button" style="border-radius: 20px;">
+                <span class="tooltiptext" id="myTooltip">Copy to clipboard</span>
+                Copy Address
+            </button>
+        </div>
+        <br><br>
+
+        <h2>Or Scan Your QR Code Below</h2>
+          
+        <div>
+            <a href="bitcoin:{{ user_info.address }}">
+              <img src="https://www.bitcoinqrcodemaker.com/api/?style=bitcoin&address={{ user_info.address }}&color=1">
+            </a> 
+        </div>
+          
+        <script>
+          function myFunction() {
+            var copyText = document.getElementById("myInput");
+            copyText.select();
+            copyText.setSelectionRange(0, 99999);
+            document.execCommand("copy");
+            
+            var tooltip = document.getElementById("myTooltip");
+            tooltip.innerHTML = "Copied: " + copyText.value;
+          }
+          
+          function outFunc() {
+            var tooltip = document.getElementById("myTooltip");
+            tooltip.innerHTML = "Copy to clipboard";
+          }
+        </script>
+
+    </main>
+
     <!-- FOOTER -->
     <footer>
       <!-- Social -->

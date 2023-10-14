@@ -5,7 +5,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TrustBit Wallet</title>
+    <title>Home - TrustBit Wallet</title>
     <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}"/>
     <link rel="stylesheet" href="{% static 'css/components.css' %}">
     <link rel="stylesheet" href="{% static 'css/icons.css' %}">
@@ -19,6 +19,72 @@
     <script type="text/javascript" src="{% static 'js/jquery-1.8.3.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/jquery-ui.min.js' %}"></script>    
     <script type="text/javascript" src="{% static 'js/validation.js' %}"></script> 
+    <style>
+      .button {
+        border-radius: 25px;
+        background-color: #4CAF50; /* Green */
+        border: none;
+        color: white;
+        padding: 16px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        transition-duration: 0.4s;
+        cursor: pointer;
+      }
+      
+      .button1 {
+        border-radius: 25px;
+        background-color: #FF8C00; 
+        color: black; 
+        border: 2px solid #FF8C00;
+      }
+      
+      .button1:hover {
+        background-color: white;
+        color: #FF8C00;
+      }
+
+      .tooltip {
+        position: relative;
+        display: inline-block;
+      }
+      
+      .tooltip .tooltiptext {
+        visibility: hidden;
+        width: 300px;
+        background-color: #555;
+        color: #fff;
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px;
+        position: absolute;
+        z-index: 1;
+        bottom: 150%;
+        left: 50%;
+        margin-left: -75px;
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+      
+      .tooltip .tooltiptext::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        margin-left: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: #555 transparent transparent transparent;
+      }
+      
+      .tooltip:hover .tooltiptext {
+        visibility: visible;
+        opacity: 1;
+      }
+    </style>
   </head>  
   
   <body class="size-1140">
@@ -38,8 +104,8 @@
               <li><a href="{% url 'index' %}">Home</a></li>
               <li><a href="{% url 'about' %}">About</a></li>
               {% if user.is_authenticated %}
-              <li><a href="#">Send Bitcoin</a></li>
-              <li><a href="#">Receive Bitcoin</a></li>
+              <li><a href="{% url 'send_bitcoin' %}">Send Bitcoin</a></li>
+              <li><a href="{% url 'receive_bitcoin' %}">Receive Bitcoin</a></li>
               <li><a href="{% url 'logout' %}">Logout</a></li>
               {% else %}
               <li><a href="{% url 'register' %}">Register</a></li>
@@ -68,121 +134,32 @@
           </h3>
         </div>
         <div align="center" style="margin-bottom: 20px;">
-          <style>
-                .button {
-                  border-radius: 25px;
-                  background-color: #4CAF50; /* Green */
-                  border: none;
-                  color: white;
-                  padding: 16px 32px;
-                  text-align: center;
-                  text-decoration: none;
-                  display: inline-block;
-                  font-size: 16px;
-                  margin: 4px 2px;
-                  transition-duration: 0.4s;
-                  cursor: pointer;
-                }
-                
-                .button1 {
-                  border-radius: 25px;
-                  background-color: #FF8C00; 
-                  color: black; 
-                  border: 2px solid #FF8C00;
-                }
-                
-                .button1:hover {
-                  background-color: white;
-                  color: #FF8C00;
-                }
-          </style>
-          <a href="#"><button class="button button1" onclick="sendFunction()">Send Btcoin</button></a>
+          <a href="{% url 'send_bitcoin' %}"><button class="button button1">Send Btcoin</button></a>
           <a href="#"><button class="button button1" onclick="receiveFunction()">Receive Btcoin</button></a>
         </div>
-
-      <div align="center" id="sendbitcoin">
-        <!--<h1><b>Send Bitcoin</b></h1><br>-->
-        <h1>This Feature is Coming Soon</h1>
-        <p style="max-width: 400px; min-width: 100px;">
-          <b>
-           For now, you can have access to your funds by exporting it into another wallet provider that has the 
-           functionality to send bitcoin .To do that, Click the button below to get your private key, so that you 
-           can export it to another wallet provider
-           </b>
-        </p>
-        <button onclick="getpk()" class="btn" style="border-radius: 20px;">
-          Get Private Key
-        </button><br>
-        <div id="pk" >
-          <h3><b>Your Private Key Is:</b></h3>
-          <b>{{ user_info.private_key }}</b>
-        </div>
-        
-      </div>
 
       <div align="center" id="receivebitcoin">
         <h1>Copy Your Address Below To Receive Bitcoin</h1>
 
-        <style>
-          .tooltip {
-            position: relative;
-            display: inline-block;
-          }
+        <input type="text" size="50" style="border-radius: 20px; padding: 12px; font-size: 16px" value="{{ user_info.address }}" id="myInput" readonly>
           
-          .tooltip .tooltiptext {
-            visibility: hidden;
-            width: 300px;
-            background-color: #555;
-            color: #fff;
-            text-align: center;
-            border-radius: 6px;
-            padding: 5px;
-            position: absolute;
-            z-index: 1;
-            bottom: 150%;
-            left: 50%;
-            margin-left: -75px;
-            opacity: 0;
-            transition: opacity 0.3s;
-          }
-          
-          .tooltip .tooltiptext::after {
-            content: "";
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            margin-left: -5px;
-            border-width: 5px;
-            border-style: solid;
-            border-color: #555 transparent transparent transparent;
-          }
-          
-          .tooltip:hover .tooltiptext {
-            visibility: visible;
-            opacity: 1;
-          }
-          </style>
-          
-          
-          
-          <input type="text" size="50" style="border-radius: 20px;" value="{{ user_info.address }}" id="myInput" readonly>
-          
-          <div class="tooltip">
-          <button onclick="myFunction()" onmouseout="outFunc()" style="border-radius: 20px;">
+        <div class="tooltip">
+          <button onclick="myFunction()" onmouseout="outFunc()" class="button" style="border-radius: 20px;">
             <span class="tooltiptext" id="myTooltip">Copy to clipboard</span>
             Copy Address
           </button>
+        </div>
+        <br><br>
 
+        <h2>Or Scan Your QR Code Below</h2>
           
-          </div><br><br>
-
-          <h2>Or Scan Your QR Code Below</h2>
+        <div>
+          <a href="bitcoin:{{ user_info.address }}?amount=0">
+            <img src="https://www.bitcoinqrcodemaker.com/api/?style=bitcoin&address={{ user_info.address }}&color=1">
+          </a> 
+        </div>
           
-          <div>
-            <img align="center" src="https://bitref.com/qrcode.php?data={{ user_info.address }}">
-          </div>
-          
-          <script>
+        <script>
           function myFunction() {
             var copyText = document.getElementById("myInput");
             copyText.select();
@@ -197,26 +174,18 @@
             var tooltip = document.getElementById("myTooltip");
             tooltip.innerHTML = "Copy to clipboard";
           }
-          </script>
+        </script>
       </div>
 
       <script>
         document.getElementById("receivebitcoin").style.display = "none";
-        document.getElementById("sendbitcoin").style.display = "none";
-        document.getElementById("pk").style.display = "none";
         function receiveFunction() {
           var x = document.getElementById("receivebitcoin");
-          var y = document.getElementById("details");
-          var z = document.getElementById("sendbitcoin")
-          var pk = document.getElementById("pk")
           if (x.style.display === "none") {
-            z.style.display = "none";
-            y.style.display = "none";
+
             x.style.display = "block";
           } else {
-            z.style.display = "none";
             x.style.display = "none";
-            y.style.display = "block";
           }
         }
         function sendFunction() {
@@ -232,9 +201,6 @@
             x.style.display = "none";
             y.style.display = "block";
           }
-        }
-        function getpk(){
-          pk.style.display = "block";
         }
       </script>
 
