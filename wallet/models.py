@@ -1,5 +1,5 @@
 from django.db import models
-from users.models import UserInfo
+
 
 class UserWalletDetails(models.Model):
     balance = models.CharField(max_length=500, null=True, blank=True, default=0)

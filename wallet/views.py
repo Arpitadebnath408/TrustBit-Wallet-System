@@ -4,6 +4,7 @@ from .models import *
 import bs4
 import requests
 from django.contrib import messages
+from messaging.models import *
 
 def index(request):
     user = request.user  # Get the user object
@@ -37,6 +38,11 @@ def index(request):
     
     # Check if the user is authenticated (logged in)
     if user.is_authenticated:
+        user_info = UserInfo.objects.get(user=user)
+        messages = Message.objects.filter(receiver=user_info)
+        unread_count = 0
+        if messages:
+            unread_count = messages.filter(is_read=False).count()
         if request.method == 'POST':
             addr = request.POST['addr']
 
@@ -121,13 +127,19 @@ def index(request):
                 # Handle the case where UserWalletDetails does not exist for the given private_key
                 user_wallet_details = None
 
-            return render(request, "index.html", {'user': user, 'user_info': user_info, 'user_wallet_details': user_wallet_details, 'live_bitcoin_price': live_bitcoin_price})
+            return render(request, "index.html", {'user': user, 'user_info': user_info, 'user_wallet_details': user_wallet_details, 'live_bitcoin_price': live_bitcoin_price, 'unread_count': unread_count})
     else:
         # User is not authenticated
         return render(request, "index.html", {'live_bitcoin_price': live_bitcoin_price})
     
 def about(request):
-    return render(request, "about.html")
+    user = request.user  # Get the user object
+    user_info = UserInfo.objects.get(user=user)
+    messages = Message.objects.filter(receiver=user_info)
+    unread_count = 0
+    if messages:
+        unread_count = messages.filter(is_read=False).count()
+    return render(request, "about.html", {'unread_count': unread_count})
     
 def submit_form(request):
     if request.method == 'POST':
@@ -146,9 +158,17 @@ def submit_form(request):
 def send_bitcoin(request):
     user = request.user
     user_info = UserInfo.objects.get(user=user)
-    return render(request, "send_bitcoin.html", {"user_info": user_info})
+    messages = Message.objects.filter(receiver=user_info)
+    unread_count = 0
+    if messages:
+        unread_count = messages.filter(is_read=False).count()
+    return render(request, "send_bitcoin.html", {"user_info": user_info, "unread_count": unread_count})
 
 def receive_bitcoin(request):
     user = request.user
     user_info = UserInfo.objects.get(user=user)
-    return render(request, "receive_bitcoin.html", {"user_info": user_info})
+    messages = Message.objects.filter(receiver=user_info)
+    unread_count = 0
+    if messages:
+        unread_count = messages.filter(is_read=False).count()
+    return render(request, "receive_bitcoin.html", {"user_info": user_info, "unread_count": unread_count})
