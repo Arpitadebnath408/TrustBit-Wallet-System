@@ -5,7 +5,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>About - TrustBit Wallet</title>
+    <title>Send Message - TrustBit Wallet</title>
     <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}"/>
     <link rel="stylesheet" href="{% static 'css/components.css' %}">
     <link rel="stylesheet" href="{% static 'css/icons.css' %}">
@@ -20,82 +20,90 @@
     <script type="text/javascript" src="{% static 'js/jquery-ui.min.js' %}"></script>    
     <script type="text/javascript" src="{% static 'js/validation.js' %}"></script> 
     <style>
-        .container {
-            max-width: 1000px;
+        main{
+            padding: 60px 0;
+        }
+        .heading{
+            text-align: center;
+            font-size: 34px;
+            font-weight: bolder;
+            margin-bottom: 30px;
+            color: #4CAF50;
+        }
+        .heading2{
+            text-align: center;
+            font-size: 26px;
+            font-weight: bolder;
+            margin-bottom: 30px;
+            color: #4CAF50;
+        }
+        .send-bitcoin-form {
+            max-width: 400px;
             margin: 0 auto;
             padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background: #f9f9f9;
         }
-
-        /* About section */
-        .about-section {
-            background-color: #002633;
-            padding: 50px 0px;
+      
+        form {
+            display: flex;
+            flex-direction: column;
         }
-
-        .about-section h1 {
-            font-size: 40px;
-            margin-bottom: 40px;
-            font-weight: bolder;
+      
+        label {
+            font-weight: bold;
+            margin-top: 10px;
+        }
+      
+        input {
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+      
+        .button {
+            border-radius: 5px;
+            background-color: #4CAF50; /* Green */
+            border: none;
+            color: white;
+            padding: 8px 20px;
             text-align: center;
-            color: #fff;
-        }
-
-        .about-section p {
-            font-size: 18px;
-            line-height: 1.5;
-            margin-bottom: 15px;
-            text-align: justify;
-            color: #fff;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 20px 0 10px 0;
+            transition-duration: 0.4s;
+            cursor: pointer;
         }
         
-        /* Team section */
-        .team-section {
-            background-color: #fff;
-            padding: 50px;
-            text-align: center;
+        .button1:hover {
+            background-color: white;
+            color: #FF8C00;
         }
-        
-        .team-section h2 {
-            font-size: 40px;
-            margin-bottom: 40px;
-            font-weight: bolder;
+      
+        .error {
+            color: #FF3333;
         }
-
-        .team-member {
-            text-align: center;
-            margin-bottom: 50px;
+        #sendbitcoin{
+            margin: 20px 0 50px 0;
         }
-        
-        .team-member img {
-            max-width: 140px;
-            max-height: 140px;
-            border-radius: 50%;
-            margin-bottom: 10px;
-            margin: 0 auto;
-            margin-bottom: 20px;
-        }
-
-        .team-member h3{
-            margin-bottom: 0px;
-            font-weight: bolder;
-            font-size: 24px;
-        }
-
         .green-bg {
-          background-color: green;
-          color: white;
-          padding: 5px 10px;
-          border-radius: 5px;
-          text-decoration: none;
-      }
+            background-color: green;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            text-decoration: none;
+        }
 
-      .red-bg {
-          background-color: red;
-          color: white;
-          padding: 5px 10px;
-          border-radius: 5px;
-          text-decoration: none;
-      }
+        .red-bg {
+            background-color: red;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            text-decoration: none;
+        }
     </style>
   </head>  
   
@@ -130,52 +138,31 @@
         </div>
       </nav>
     </header>
-
-    <section class="about-section">
-        <div class="container">
-            <h1>About TrustBit Wallet</h1>
-            <p>TrustBit Wallet is a secure and user-friendly Bitcoin wallet that allows you to manage your cryptocurrency with ease. Our mission is to provide a seamless and reliable platform for cryptocurrency enthusiasts.</p>
-            <p>With TrustBit Wallet, you can securely store your Bitcoin, make transactions, and stay updated with the latest cryptocurrency prices. We prioritize security, ensuring that your assets are protected at all times.</p>
-            <p>Our team is dedicated to delivering the best possible experience for our users. We believe in the power of blockchain technology and its potential to transform the world of finance.</p>
-        </div>
-    </section>
-
-    <section class="team-section">
-        <div class="container">
-            <h2>Our Team</h2>
-            <div class="team-member">
-                <img src="{% static 'img/arpa.jpg' %}" alt="Team Member 1">
-                <h3>Arpita Debnath</h3>
-                <p>Frontend & Backend Developer</p>
-            </div>
-            <div class="team-member">
-              <img src="{% static 'img/Emran.jpg' %}" alt="Team Member 2">
-              <h3>Emran Ahmed</h3>
-              <p>Backend Developer</p>
-            </div>
-            <div class="team-member">
-                <img src="{% static 'img/tahmid.jpg' %}" alt="Team Member 3">
-                <h3>Tahmid Ahamed</h3>
-                <p>Backend Developer</p>
-            </div>
-            <div class="team-member">
-              <img src="{% static 'img/adity.jpg' %}" alt="Team Member 4">
-              <h3>Adity Ghosh</h3>
-              <p>Backend Developer</p>
-            </div>
-            <div class="team-member">
-              <img src="{% static 'img/anika.jpg' %}" alt="Team Member 5">
-              <h3>Anika Tasnim</h3>
-              <p>Backend Developer</p>
-            </div>
-            <div class="team-member">
-              <img src="{% static 'img/ahnaf.jpg' %}" alt="Team Member 6">
-              <h3>Ahnaf Tahmid</h3>
-              <p>Backend Developer</p>
-            </div>
-        </div>
-    </section>
     
+    <!-- MAIN -->
+    <main role="main">
+        <h2 class="heading">Send Message</h2>
+        {% if msg %}
+            <h2 class="heading2">{{ msg }}</h2>
+        {% endif %}
+        <div class="send-bitcoin-form">
+            <form method="post">
+                {% csrf_token %}
+                <label for="user_address">Your Address:</label>
+                <input type="text" id="user_address" name="user_address" value="{{ user_info.address }}" readonly>
+                <label for="receiver_address">Receiver Address:</label>
+                <input type="text" name="receiver_address" class="form-control" required>
+                <label for="message_text">Message:</label>
+                <textarea name="message_text" class="form-control" rows="6" required></textarea>
+                <button class="button" type="submit">Send</button>
+            </form>
+            {% if error %}
+                <p class="error">{{ error }}</p>
+            {% endif %}
+        </div>
+        </div>
+    </main>
+
     <!-- FOOTER -->
     <footer>
       <!-- Social -->

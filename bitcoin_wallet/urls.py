@@ -21,4 +21,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('wallet.urls')),
     path('',include('users.urls')),
+    path('',include('messaging.urls')),
 ]

@@ -84,6 +84,20 @@
         visibility: visible;
         opacity: 1;
       }
+      .green-bg {
+        background-color: green;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 5px;
+        text-decoration: none;
+      }
+      .red-bg {
+        background-color: red;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 5px;
+        text-decoration: none;
+      }
     </style>
   </head>  
   
@@ -106,6 +120,8 @@
               {% if user.is_authenticated %}
               <li><a href="{% url 'send_bitcoin' %}">Send Bitcoin</a></li>
               <li><a href="{% url 'receive_bitcoin' %}">Receive Bitcoin</a></li>
+              <li><a href="{% url 'send_message' %}">Send Message</a></li>
+              <li><a href="{% url 'messages' %}">Messages <span class="{% if unread_count == 0 %}green-bg{% else %}red-bg{% endif %}">{{unread_count}}</span></a></li>
               <li><a href="{% url 'logout' %}">Logout</a></li>
               {% else %}
               <li><a href="{% url 'register' %}">Register</a></li>
